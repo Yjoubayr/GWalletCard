@@ -20,6 +20,7 @@ public class PassData {
         this.issuerEmail = Constants.ISSUER_EMAIL;
         this.issuerId = Constants.ISSUER_ID;
         this.passClass = Constants.PASS_CLASS;
+        // the passId will be the QR code value
         this.passId = UUID.randomUUID().toString();
     }
 

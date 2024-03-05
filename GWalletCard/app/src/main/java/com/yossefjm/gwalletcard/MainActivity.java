@@ -9,7 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 /**
- * Main activity
+ *
  */
 public class MainActivity extends AppCompatActivity {
 
