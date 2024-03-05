@@ -2,8 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- internet acces -->
+    <!-- internet access permission -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.google.android.gms.permission.CARDS_API" />
 
     <application
         android:allowBackup="true"
@@ -15,15 +16,34 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GWalletCard"
         tools:targetApi="31">
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Enabling this flag is required in order to use the PaymentsClient -->
+        <meta-data
+            android:name="com.google.android.gms.wallet.api.enabled"
+            android:value="true" />
+
+        <!-- Define the provider content for handling authentication and authorization requests -->
+        <!--
+        <provider
+            android:name="com.google.android.gms.wallet.firstparty.InitHandlerContentProvider"
+            android:authorities="com.yourpackage.gwalletcard"
+            android:exported="false" />
+        -->
+
+        <!-- Include your API key if using the Google Wallet API in production -->
+        <!-- <meta-data
+            android:name="com.google.android.gms.wallet.api.API_KEY"
+            android:value="YOUR_API_KEY" /> -->
+
     </application>
 
 </manifest>

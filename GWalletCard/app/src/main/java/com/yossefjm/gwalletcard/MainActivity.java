@@ -1,54 +1,51 @@
 package com.yossefjm.gwalletcard;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.pay.Pay;
-import com.google.android.gms.pay.PayApiAvailabilityStatus;
-import com.google.android.gms.pay.PayClient;
-import com.google.android.gms.wallet.PaymentsClient;
-import com.google.android.gms.wallet.Wallet;
-import com.google.android.gms.wallet.WalletConstants;
-
+/**
+ * Main activity
+ */
 public class MainActivity extends AppCompatActivity {
 
-    // walletClient is the client that will be used to interact with the google wallet api
-    private PayClient walletClient;
+    private WalletApiManager walletApiManager;
 
-
-
+    /**
+     * Called when the activity is starting.
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down then this Bundle contains the data it most recently supplied in onSaveInstanceState.
+     *                           Note: Otherwise it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // we will initialize the wallet client here
-        walletClient = Pay.getClient(this);
+        walletApiManager = new WalletApiManager(this);
 
         findViewById(R.id.addToGoogleWalletButton).setOnClickListener(v -> {
-            // here we want to put a new card to the google wallet
-            // we will use the google pay api to do that
-
-
-
-
+            // Aquí queremos guardar una nueva tarjeta en Google Wallet
+            walletApiManager.savePassToWallet(new PassData().generatePassJson(), this);
         });
     }
 
-
-    private void fetchCanUseGoogleWalletApi() {
-        walletClient
-                .getPayApiAvailabilityStatus(PayClient.RequestType.SAVE_PASSES)
-                .addOnSuccessListener { status ->
-                    if (status == PayApiAvailabilityStatus.AVAILABLE)
-                        Toast.makeText(this, "Google Wallet API is available", Toast.LENGTH_SHORT).show()
-                    }
-                .addOnFailureListener {
-                    // Hide the button and optionally show an error message
-                    Toast.makeText(this, "Google Wallet API is not available", Toast.LENGTH_SHORT).show()
-                }
-            }
+    /**
+     * Called when an activity you launched exits, giving you the requestCode you started it with, the resultCode it returned, and any additional data from it.
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode The integer result code returned by the child activity
+     *                   through its setResult().
+     * @param data An Intent, which can return result data to the caller
+     *               (various data can be attached to Intent "extras").
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        walletApiManager.onActivityResult(requestCode, resultCode, data);
+    }
 }
